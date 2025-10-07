@@ -75,7 +75,9 @@ The server accepts command-line arguments to customize parameter requirements an
 - `--all-optional` - Make everything optional (minimum ceremony)
 - `--mandatory prompt,temperature` - Specify which params are required
 - `--optional extra,depth` - Specify which params are optional
-- `--add-param "focus:string:Current area of focus"` - Add custom parameters
+- `--add-param "name:type:description[:required]"` - Add custom parameters
+  - Required field: `mandatory`, `optional`, `true`, `false`, or `required`
+  - Defaults to optional if not specified
 
 **Examples:**
 
@@ -86,8 +88,11 @@ node dist/index.js --mandatory prompt
 # Full scaffolding: all params required
 node dist/index.js --all-mandatory
 
-# Custom cognitive dimensions
+# Custom cognitive dimensions (optional by default)
 node dist/index.js --add-param "risk_tolerance:number:Acceptable risk level"
+
+# Mandatory custom parameter
+node dist/index.js --add-param "focus:string:Current focus area:mandatory"
 ```
 
 Configure in `.mcp.json` by adding arguments to the `args` array.

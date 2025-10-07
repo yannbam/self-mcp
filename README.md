@@ -164,8 +164,8 @@ The server accepts CLI arguments to customize which parameters are required or o
       "command": "node",
       "args": [
         "/path/to/self-mcp/dist/index.js",
-        "--add-param", "focus:string:Current area of focus",
-        "--add-param", "uncertainty:number:Degree of uncertainty"
+        "--add-param", "focus:string:Current area of focus:mandatory",
+        "--add-param", "uncertainty:number:Degree of uncertainty:optional"
       ]
     }
   }
@@ -177,8 +177,20 @@ The server accepts CLI arguments to customize which parameters are required or o
 - `--all-optional` - Make all parameters optional including prompt (minimum ceremony)
 - `--mandatory <param1,param2>` - Make specific parameters mandatory
 - `--optional <param1,param2>` - Make specific parameters optional
-- `--add-param <name:type:description>` - Add custom parameters dynamically
+- `--add-param <name:type:description[:required]>` - Add custom parameters dynamically
+  - Format: `name:type:description` or `name:type:description:mandatory|optional`
+  - Type: `string` or `number`
+  - Required field defaults to `optional` if not specified
 - `--help` - Show help message
+
+**Examples:**
+```bash
+# Optional custom parameter (default)
+--add-param "focus:string:Current area of focus"
+
+# Mandatory custom parameter
+--add-param "confidence:number:Confidence level:mandatory"
+```
 
 **Use cases:**
 - **Quick pivots**: `--all-optional` for lightweight cognitive shifts
@@ -233,4 +245,4 @@ MIT
 
 ---
 
-*Concept and implementation with janbam 🌱*
+*Built with janbam 🌱*

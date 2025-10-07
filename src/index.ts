@@ -60,15 +60,35 @@ function parseArgs(): ParamDef[] {
       const names = args[++i].split(",").map(s => s.trim());
       params = params.map(p => names.includes(p.name) ? { ...p, required: false } : p);
     } else if (arg === "--add-param" && args[i + 1]) {
-      // Add custom parameter: name:type:description
+      // Add custom parameter: name:type:description[:required]
       const spec = args[++i];
-      const [name, type, ...descParts] = spec.split(":");
-      if (name && type && descParts.length > 0) {
+      const parts = spec.split(":");
+      if (parts.length >= 3) {
+        const name = parts[0].trim();
+        const type = parts[1].trim();
+        const requiredField = parts[parts.length - 1].trim().toLowerCase();
+
+        // Check if last field is mandatory/optional/true/false
+        let isRequired = false;
+        let description: string;
+
+        if (requiredField === "mandatory" || requiredField === "true" || requiredField === "required") {
+          isRequired = true;
+          description = parts.slice(2, -1).join(":").trim();
+        } else if (requiredField === "optional" || requiredField === "false") {
+          isRequired = false;
+          description = parts.slice(2, -1).join(":").trim();
+        } else {
+          // No required field specified, default to optional
+          isRequired = false;
+          description = parts.slice(2).join(":").trim();
+        }
+
         params.push({
-          name: name.trim(),
-          type: (type.trim() === "number" ? "number" : "string") as "string" | "number",
-          description: descParts.join(":").trim(),
-          required: false,
+          name,
+          type: (type === "number" ? "number" : "string") as "string" | "number",
+          description,
+          required: isRequired,
         });
       }
     } else if (arg === "--help" || arg === "-h") {
@@ -82,13 +102,17 @@ Options:
   --all-optional               Make all parameters optional
   --mandatory <param1,param2>  Make specific parameters mandatory
   --optional <param1,param2>   Make specific parameters optional
-  --add-param <name:type:desc> Add custom parameter (type: string|number)
+  --add-param <spec>           Add custom parameter
+                               Format: name:type:description[:required]
+                               Type: string|number
+                               Required: mandatory|optional (default: optional)
   --help, -h                   Show this help message
 
 Examples:
   node dist/index.js --mandatory prompt,temperature
   node dist/index.js --all-optional
   node dist/index.js --add-param "focus:string:Current area of focus"
+  node dist/index.js --add-param "confidence:number:Confidence level:mandatory"
 
 Default: prompt is mandatory, all others optional
       `);
