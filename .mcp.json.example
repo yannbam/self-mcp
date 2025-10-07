@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }

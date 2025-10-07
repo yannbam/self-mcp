@@ -55,19 +55,19 @@ All parameters are **completely freeform** (except temperature which is numeric 
 
 ```bash
 # Clone and build
-git clone https://github.com/yourusername/self-mcp.git
+git clone https://github.com/yannbam/self-mcp.git
 cd self-mcp
 npm install && npm run build
 
 # Add to Claude (user-wide)
-claude mcp add --scope user self node $(pwd)/dist/index.js
+claude mcp add --scope user Self node $(pwd)/dist/index.js
 ```
 
 ### Option 2: Manual Installation
 
 **Step 1: Clone and build**
 ```bash
-git clone https://github.com/yourusername/self-mcp.git
+git clone https://github.com/yannbam/self-mcp.git
 cd self-mcp
 npm install
 npm run build
@@ -79,7 +79,7 @@ For **Claude Code**, add to `.mcp.json` in your project:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
@@ -95,7 +95,7 @@ For **Claude Desktop**, add to your MCP settings file:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
@@ -110,7 +110,7 @@ For **Claude Desktop**, add to your MCP settings file:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["C:\\absolute\\path\\to\\self-mcp\\dist\\index.js"]
     }
@@ -125,7 +125,7 @@ For **Claude Desktop**, add to your MCP settings file:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
@@ -145,22 +145,22 @@ The server accepts CLI arguments to customize which parameters are required or o
 ```json
 {
   "mcpServers": {
-    "self-minimal": {
+    "Self-minimal": {
       "command": "node",
       "args": ["/path/to/self-mcp/dist/index.js", "--all-optional"]
     },
-    "self-full": {
+    "Self-full": {
       "command": "node",
       "args": ["/path/to/self-mcp/dist/index.js", "--all-mandatory"]
     },
-    "self-custom": {
+    "Self-custom": {
       "command": "node",
       "args": [
         "/path/to/self-mcp/dist/index.js",
         "--mandatory", "prompt,temperature,thinking_style"
       ]
     },
-    "self-extended": {
+    "Self-extended": {
       "command": "node",
       "args": [
         "/path/to/self-mcp/dist/index.js",
