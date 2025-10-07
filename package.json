@@ -1,0 +1,30 @@
+{
+  "name": "self-mcp",
+  "version": "0.1.0",
+  "description": "Metacognitive self-prompting MCP server for Claude",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "self-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "claude",
+    "metacognition",
+    "self-prompting"
+  ],
+  "author": "janbam",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
