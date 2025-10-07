@@ -2,7 +2,7 @@
   "mcpServers": {
     "Self": {
       "command": "node",
-      "args": ["/home/jan/projects/self-mcp/dist/index.js"]
+      "args": ["/home/jan/projects/self-mcp/dist/index.js", "--all-optional"]
     }
   }
 }
