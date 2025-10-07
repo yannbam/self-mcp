@@ -41,20 +41,43 @@ Test by using it! The best validation is whether calling Self actually triggers 
 
 ## Parameters
 
-**Required:**
-- `prompt` (string) - The self-prompt or cognitive instruction
-- `temperature` (number 0-2) - Cognitive temperature
-- `thinking_style` (string) - Thinking approach
-- `archetype` (string) - Cognitive archetype
-- `strategy` (string) - Problem-solving strategy
-- `scope` (string) - Cognitive zoom level
-- `depth` (string) - Thoroughness and time investment
-- `budget` (string) - Resource and constraint awareness
-
-**Optional:**
-- `extra` (string) - Additional context or focus
+**Default configuration:**
+- `prompt` (string) - Required
+- All others optional: `temperature`, `thinking_style`, `archetype`, `strategy`, `scope`, `depth`, `budget`, `extra`
 
 All string parameters are completely freeform - Claude invents appropriate values.
+
+## CLI Configurability
+
+The server accepts command-line arguments to customize parameter requirements and even add new parameters dynamically.
+
+**Why configurable?**
+- Different use cases need different ceremony levels
+- Quick pivots benefit from minimal required params
+- Deep exploration benefits from comprehensive scaffolding
+- Custom parameters enable domain-specific cognitive dimensions
+
+**CLI Arguments:**
+- `--all-mandatory` - Require all parameters (maximum scaffolding)
+- `--all-optional` - Make everything optional (minimum ceremony)
+- `--mandatory prompt,temperature` - Specify which params are required
+- `--optional extra,depth` - Specify which params are optional
+- `--add-param "focus:string:Current area of focus"` - Add custom parameters
+
+**Examples:**
+
+```bash
+# Minimal version: only prompt required
+node dist/index.js --mandatory prompt
+
+# Full scaffolding: all params required
+node dist/index.js --all-mandatory
+
+# Custom cognitive dimensions
+node dist/index.js --add-param "risk_tolerance:number:Acceptable risk level"
+```
+
+Configure in `.mcp.json` by adding arguments to the `args` array.
 
 ---
 

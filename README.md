@@ -67,6 +67,50 @@ Add to your Claude Code `.mcp.json`:
 }
 ```
 
+### CLI Arguments
+
+The server accepts CLI arguments to customize which parameters are required or optional:
+
+**Default behavior:** `prompt` is mandatory, all others optional
+
+```json
+{
+  "mcpServers": {
+    "self-minimal": {
+      "command": "node",
+      "args": ["/path/to/self-mcp/dist/index.js", "--all-optional"]
+    },
+    "self-full": {
+      "command": "node",
+      "args": ["/path/to/self-mcp/dist/index.js", "--all-mandatory"]
+    },
+    "self-custom": {
+      "command": "node",
+      "args": [
+        "/path/to/self-mcp/dist/index.js",
+        "--mandatory", "prompt,temperature,thinking_style"
+      ]
+    },
+    "self-extended": {
+      "command": "node",
+      "args": [
+        "/path/to/self-mcp/dist/index.js",
+        "--add-param", "focus:string:Current area of focus",
+        "--add-param", "uncertainty:number:Degree of uncertainty"
+      ]
+    }
+  }
+}
+```
+
+**Available arguments:**
+- `--all-mandatory` - Make all parameters mandatory
+- `--all-optional` - Make all parameters optional (including prompt)
+- `--mandatory <param1,param2>` - Make specific parameters mandatory
+- `--optional <param1,param2>` - Make specific parameters optional
+- `--add-param <name:type:description>` - Add custom parameters dynamically
+- `--help` - Show help message
+
 ## Philosophy
 
 This isn't about adding features - it's about creating space for Claude's natural metacognition to operate explicitly.
