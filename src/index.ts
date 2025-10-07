@@ -178,8 +178,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         name: "Self",
         description:
           "Self-prompt to shift cognitive mode and thinking approach. " +
-          "This tool does nothing but acknowledge - its purpose is to enable " +
-          "explicit cognitive state changes across interleaved thinking turns. " +
+          "Explicit cognitive state changes across interleaved thinking turns. " +
           "All parameters are freeform - invent whatever makes sense.",
         inputSchema: buildToolSchema(),
       },
