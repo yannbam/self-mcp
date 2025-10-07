@@ -21,6 +21,11 @@ htmlcov/
 
 # MCP
 .mcp/
+.mcp.json
 
 # Claude
 .claude-trace/
+
+# Project-specific
+.notes/
+.plans/

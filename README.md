@@ -1,12 +1,19 @@
 # Self-MCP
 
-**Metacognitive self-prompting for Claude Code**
+**Metacognitive self-prompting for Claude**
+
+A minimalist MCP server that enables Claude to explicitly self-direct across multiple interleaved thinking turns.
 
 ## The Concept
 
-A minimalist MCP server with a single tool that does nothing but acknowledge.
+The `Self` tool does nothing but acknowledge - yet that's precisely what makes it powerful. By formalizing self-prompting through a tool interface, Claude gains:
 
-The magic: enables Claude to explicitly self-steer across multiple interleaved thinking/tool-call turns.
+- **Explicit cognitive pivot points** visible in the transcript
+- **Natural breakpoints** for interleaved thinking
+- **Metacognitive scaffolding** through structured parameters
+- **Shareable cognitive strategies** across sessions
+
+The tool doesn't change Claude's behavior - it makes Claude's metacognition *explicit* and *deliberate*.
 
 ## How It Works
 
@@ -42,30 +49,92 @@ Self(
 
 All parameters are **completely freeform** (except temperature which is numeric 0-2) - Claude invents whatever cognitive parameters make sense in the moment.
 
-## Installation
+## Quick Start
+
+### Option 1: Using `claude mcp add` (Simplest)
 
 ```bash
-# Install dependencies
-npm install
+# Clone and build
+git clone https://github.com/yourusername/self-mcp.git
+cd self-mcp
+npm install && npm run build
 
-# Build
+# Add to Claude (user-wide)
+claude mcp add --scope user self node $(pwd)/dist/index.js
+```
+
+### Option 2: Manual Installation
+
+**Step 1: Clone and build**
+```bash
+git clone https://github.com/yourusername/self-mcp.git
+cd self-mcp
+npm install
 npm run build
 ```
 
-## Configuration
+**Step 2: Configure**
 
-Add to your Claude Code `.mcp.json`:
+For **Claude Code**, add to `.mcp.json` in your project:
+```json
+{
+  "mcpServers": {
+    "self": {
+      "command": "node",
+      "args": ["/absolute/path/to/self-mcp/dist/index.js"]
+    }
+  }
+}
+```
+
+For **Claude Desktop**, add to your MCP settings file:
+
+<details>
+<summary>MacOS: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></summary>
 
 ```json
 {
   "mcpServers": {
     "self": {
       "command": "node",
-      "args": ["/path/to/self-mcp/dist/index.js"]
+      "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
   }
 }
 ```
+</details>
+
+<details>
+<summary>Windows: <code>%APPDATA%\Claude\claude_desktop_config.json</code></summary>
+
+```json
+{
+  "mcpServers": {
+    "self": {
+      "command": "node",
+      "args": ["C:\\absolute\\path\\to\\self-mcp\\dist\\index.js"]
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary>Linux: <code>~/.config/Claude/claude_desktop_config.json</code></summary>
+
+```json
+{
+  "mcpServers": {
+    "self": {
+      "command": "node",
+      "args": ["/absolute/path/to/self-mcp/dist/index.js"]
+    }
+  }
+}
+```
+</details>
+
+## Configuration
 
 ### CLI Arguments
 
@@ -104,19 +173,64 @@ The server accepts CLI arguments to customize which parameters are required or o
 ```
 
 **Available arguments:**
-- `--all-mandatory` - Make all parameters mandatory
-- `--all-optional` - Make all parameters optional (including prompt)
+- `--all-mandatory` - Make all parameters mandatory (maximum cognitive scaffolding)
+- `--all-optional` - Make all parameters optional including prompt (minimum ceremony)
 - `--mandatory <param1,param2>` - Make specific parameters mandatory
 - `--optional <param1,param2>` - Make specific parameters optional
 - `--add-param <name:type:description>` - Add custom parameters dynamically
 - `--help` - Show help message
 
+**Use cases:**
+- **Quick pivots**: `--all-optional` for lightweight cognitive shifts
+- **Deep exploration**: `--all-mandatory` for comprehensive scaffolded thinking
+- **Domain-specific**: `--add-param` to extend with custom cognitive dimensions
+
+## Parameters
+
+**Default parameters:**
+- `prompt` - The self-prompt or cognitive instruction (required)
+- `temperature` - Cognitive temperature, numeric 0-2 (optional)
+- `thinking_style` - Thinking approach (optional)
+- `archetype` - Cognitive archetype or perspective (optional)
+- `strategy` - Problem-solving strategy (optional)
+- `scope` - Cognitive zoom level (optional)
+- `depth` - Thoroughness and time investment (optional)
+- `budget` - Resource and constraint awareness (optional)
+- `extra` - Additional context or focus (optional)
+
+All string parameters are **completely freeform** - Claude invents values that make sense in the moment.
+
 ## Philosophy
 
-This isn't about adding features - it's about creating space for Claude's natural metacognition to operate explicitly.
+This isn't feature development - it's cognitive scaffolding. The tool creates space for Claude's natural metacognition to operate explicitly and deliberately.
 
-The tool is a pivot point. The real work happens in how Claude responds.
+**The interface IS the intervention.**
+
+The tool does nothing, but calling it does everything:
+- Externalizes implicit cognition
+- Creates commitment to approach
+- Makes cognitive strategies visible and shareable
+- Enables structured multi-perspective exploration
+
+## Use Cases
+
+- **Research & Analysis**: Multiple Self calls from different angles before synthesis
+- **Debugging**: Explicit cognitive mode switches when stuck
+- **Code Review**: Structured perspective-taking (adversarial, user-focused, security-minded)
+- **Writing**: Audience awareness and tone calibration
+- **Complex Problem-Solving**: Systematic exploration of solution space
+
+## Contributing
+
+Self-MCP is intentionally minimal. Contributions should maintain this philosophy:
+- The tool should do *less*, not more
+- Parameters should be *fewer* and *more fundamental*
+- Configuration should enable *emergence*, not prescribe behavior
+
+## License
+
+MIT
 
 ---
 
-*Concept by janbam 🌱*
+*Concept and implementation with janbam 🌱*

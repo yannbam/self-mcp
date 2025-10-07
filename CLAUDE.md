@@ -35,9 +35,22 @@ This isn't feature development - it's cognitive scaffolding. The tool creates sp
 
 **The interface IS the intervention.**
 
+Key insights from development:
+- The tool does nothing functionally, but calling it creates explicit cognitive pivot points
+- Parameters force articulation of intent, which changes what's cognitively possible
+- The acknowledgment message encourages multiple consecutive calls for multi-perspective exploration
+- CLI configurability solves the ceremony/precision trade-off
+
 ## Testing
 
 Test by using it! The best validation is whether calling Self actually triggers meaningful cognitive shifts during real work.
+
+**Testing patterns:**
+1. Single call: Simple cognitive pivot
+2. Multiple consecutive calls: Multi-angle exploration (3-5 calls before action)
+3. With `--all-optional`: Lightweight quick pivots
+4. With `--all-mandatory`: Deep scaffolded exploration
+5. With `--add-param`: Domain-specific cognitive dimensions
 
 ## Parameters
 
@@ -78,6 +91,28 @@ node dist/index.js --add-param "risk_tolerance:number:Acceptable risk level"
 ```
 
 Configure in `.mcp.json` by adding arguments to the `args` array.
+
+## Implementation Notes
+
+**Architecture decisions:**
+- Single tool, single purpose (minimalism principle)
+- Dynamic schema generation from parameter definitions
+- CLI arguments parsed at server startup, immutable during runtime
+- All string params freeform with minimal descriptions (no examples = maximum flexibility)
+- Tool handler simply acknowledges - all cognitive work happens in Claude's response
+
+**Key files:**
+- `src/index.ts` - Complete server implementation (~190 lines)
+- `package.json` - Dependencies and metadata
+- `README.md` - Public documentation
+- `CLAUDE.md` - Developer documentation (this file)
+
+**Future considerations:**
+- Parameter refinement based on real-world usage patterns
+- Additional CLI args for acknowledgment message customization?
+- Metrics/logging for parameter usage frequency?
+
+Remember: Every addition should be questioned. The power is in what the tool *doesn't* do.
 
 ---
 

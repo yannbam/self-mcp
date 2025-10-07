@@ -12,11 +12,18 @@
     "watch": "tsc --watch",
     "start": "node dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/self-mcp.git"
+  },
   "keywords": [
     "mcp",
     "claude",
     "metacognition",
-    "self-prompting"
+    "self-prompting",
+    "ai",
+    "llm",
+    "cognitive-tools"
   ],
   "author": "janbam",
   "license": "MIT",
