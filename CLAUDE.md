@@ -39,11 +39,22 @@ This isn't feature development - it's cognitive scaffolding. The tool creates sp
 
 Test by using it! The best validation is whether calling Self actually triggers meaningful cognitive shifts during real work.
 
-## Future Considerations
+## Parameters
 
-- Should temperature be numeric or freeform string?
-- How to encourage multiple consecutive Self calls for deep reflection?
-- What tool result message best scaffolds extended thinking?
+**Required:**
+- `prompt` (string) - The self-prompt or cognitive instruction
+- `temperature` (number 0-2) - Cognitive temperature
+- `thinking_style` (string) - Thinking approach
+- `archetype` (string) - Cognitive archetype
+- `strategy` (string) - Problem-solving strategy
+- `scope` (string) - Cognitive zoom level
+- `depth` (string) - Thoroughness and time investment
+- `budget` (string) - Resource and constraint awareness
+
+**Optional:**
+- `extra` (string) - Additional context or focus
+
+All string parameters are completely freeform - Claude invents appropriate values.
 
 ---
 

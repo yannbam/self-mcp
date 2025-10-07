@@ -11,7 +11,7 @@ The magic: enables Claude to explicitly self-steer across multiple interleaved t
 ## How It Works
 
 The `Self` tool:
-- Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, extra)
+- Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, scope, depth, budget, extra)
 - Returns a simple acknowledgment message
 - Does nothing else
 
@@ -26,10 +26,13 @@ But the act of *calling* the tool creates:
 # Claude can self-prompt mid-session:
 Self(
   prompt="Re-examine from first principles",
-  temperature="high",
+  temperature=1.5,
   thinking_style="adversarial",
   archetype="skeptical_reviewer",
   strategy="find_edge_cases",
+  scope="system_wide",
+  depth="deep_dive",
+  budget="ample_tokens",
   extra="Focus on concurrency issues"
 )
 
@@ -37,7 +40,7 @@ Self(
 # Claude naturally continues thinking in that mode
 ```
 
-All parameters are **completely freeform** - Claude invents whatever cognitive parameters make sense in the moment.
+All parameters are **completely freeform** (except temperature which is numeric 0-2) - Claude invents whatever cognitive parameters make sense in the moment.
 
 ## Installation
 

@@ -63,12 +63,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "string",
               description: "Problem-solving strategy",
             },
+            scope: {
+              type: "string",
+              description: "Cognitive zoom level",
+            },
+            depth: {
+              type: "string",
+              description: "Thoroughness and time investment",
+            },
+            budget: {
+              type: "string",
+              description: "Resource and constraint awareness",
+            },
             extra: {
               type: "string",
               description: "Additional context or focus",
             },
           },
-          required: ["prompt", "temperature", "thinking_style", "archetype", "strategy"],
+          required: ["prompt", "temperature", "thinking_style", "archetype", "strategy", "scope", "depth", "budget"],
         },
       },
     ],
