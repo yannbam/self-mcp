@@ -45,14 +45,14 @@ function parseArgs(): ParamDef[] {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
 
-    if (arg === "--all-mandatory") {
-      // Make all params mandatory
+    if (arg === "--all-required") {
+      // Make all params required
       params = params.map(p => ({ ...p, required: true }));
     } else if (arg === "--all-optional") {
       // Make all params optional
       params = params.map(p => ({ ...p, required: false }));
-    } else if (arg === "--mandatory" && args[i + 1]) {
-      // Make specific params mandatory
+    } else if (arg === "--required" && args[i + 1]) {
+      // Make specific params required
       const names = args[++i].split(",").map(s => s.trim());
       params = params.map(p => names.includes(p.name) ? { ...p, required: true } : p);
     } else if (arg === "--optional" && args[i + 1]) {
@@ -60,15 +60,35 @@ function parseArgs(): ParamDef[] {
       const names = args[++i].split(",").map(s => s.trim());
       params = params.map(p => names.includes(p.name) ? { ...p, required: false } : p);
     } else if (arg === "--add-param" && args[i + 1]) {
-      // Add custom parameter: name:type:description
+      // Add custom parameter: name:type:description[:required]
       const spec = args[++i];
-      const [name, type, ...descParts] = spec.split(":");
-      if (name && type && descParts.length > 0) {
+      const parts = spec.split(":");
+      if (parts.length >= 3) {
+        const name = parts[0].trim();
+        const type = parts[1].trim();
+        const requiredField = parts[parts.length - 1].trim().toLowerCase();
+
+        // Check if last field is required/optional
+        let isRequired = false;
+        let description: string;
+
+        if (requiredField === "required") {
+          isRequired = true;
+          description = parts.slice(2, -1).join(":").trim();
+        } else if (requiredField === "optional") {
+          isRequired = false;
+          description = parts.slice(2, -1).join(":").trim();
+        } else {
+          // No required field specified, default to optional
+          isRequired = false;
+          description = parts.slice(2).join(":").trim();
+        }
+
         params.push({
-          name: name.trim(),
-          type: (type.trim() === "number" ? "number" : "string") as "string" | "number",
-          description: descParts.join(":").trim(),
-          required: false,
+          name,
+          type: (type === "number" ? "number" : "string") as "string" | "number",
+          description,
+          required: isRequired,
         });
       }
     } else if (arg === "--help" || arg === "-h") {
@@ -78,19 +98,23 @@ Self-MCP Server - Metacognitive self-prompting for Claude
 Usage: node dist/index.js [options]
 
 Options:
-  --all-mandatory              Make all parameters mandatory
+  --all-required               Make all parameters required
   --all-optional               Make all parameters optional
-  --mandatory <param1,param2>  Make specific parameters mandatory
+  --required <param1,param2>   Make specific parameters required
   --optional <param1,param2>   Make specific parameters optional
-  --add-param <name:type:desc> Add custom parameter (type: string|number)
+  --add-param <spec>           Add custom parameter
+                               Format: name:type:description[:required]
+                               Type: string|number
+                               Required: required|optional (default: optional)
   --help, -h                   Show this help message
 
 Examples:
-  node dist/index.js --mandatory prompt,temperature
+  node dist/index.js --required prompt,temperature
   node dist/index.js --all-optional
   node dist/index.js --add-param "focus:string:Current area of focus"
+  node dist/index.js --add-param "confidence:number:Confidence level:required"
 
-Default: prompt is mandatory, all others optional
+Default: prompt is required, all others optional
       `);
       process.exit(0);
     }

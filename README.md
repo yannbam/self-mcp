@@ -55,19 +55,19 @@ All parameters are **completely freeform** (except temperature which is numeric 
 
 ```bash
 # Clone and build
-git clone https://github.com/yourusername/self-mcp.git
+git clone https://github.com/yannbam/self-mcp.git
 cd self-mcp
 npm install && npm run build
 
 # Add to Claude (user-wide)
-claude mcp add --scope user self node $(pwd)/dist/index.js
+claude mcp add --scope user Self node $(pwd)/dist/index.js
 ```
 
 ### Option 2: Manual Installation
 
 **Step 1: Clone and build**
 ```bash
-git clone https://github.com/yourusername/self-mcp.git
+git clone https://github.com/yannbam/self-mcp.git
 cd self-mcp
 npm install
 npm run build
@@ -79,7 +79,7 @@ For **Claude Code**, add to `.mcp.json` in your project:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
@@ -95,7 +95,7 @@ For **Claude Desktop**, add to your MCP settings file:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
@@ -110,7 +110,7 @@ For **Claude Desktop**, add to your MCP settings file:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["C:\\absolute\\path\\to\\self-mcp\\dist\\index.js"]
     }
@@ -125,7 +125,7 @@ For **Claude Desktop**, add to your MCP settings file:
 ```json
 {
   "mcpServers": {
-    "self": {
+    "Self": {
       "command": "node",
       "args": ["/absolute/path/to/self-mcp/dist/index.js"]
     }
@@ -140,32 +140,32 @@ For **Claude Desktop**, add to your MCP settings file:
 
 The server accepts CLI arguments to customize which parameters are required or optional:
 
-**Default behavior:** `prompt` is mandatory, all others optional
+**Default behavior:** `prompt` is required, all others optional
 
 ```json
 {
   "mcpServers": {
-    "self-minimal": {
+    "Self-minimal": {
       "command": "node",
       "args": ["/path/to/self-mcp/dist/index.js", "--all-optional"]
     },
-    "self-full": {
+    "Self-full": {
       "command": "node",
-      "args": ["/path/to/self-mcp/dist/index.js", "--all-mandatory"]
+      "args": ["/path/to/self-mcp/dist/index.js", "--all-required"]
     },
-    "self-custom": {
+    "Self-custom": {
       "command": "node",
       "args": [
         "/path/to/self-mcp/dist/index.js",
-        "--mandatory", "prompt,temperature,thinking_style"
+        "--required", "prompt,temperature,thinking_style"
       ]
     },
-    "self-extended": {
+    "Self-extended": {
       "command": "node",
       "args": [
         "/path/to/self-mcp/dist/index.js",
-        "--add-param", "focus:string:Current area of focus",
-        "--add-param", "uncertainty:number:Degree of uncertainty"
+        "--add-param", "focus:string:Current area of focus:required",
+        "--add-param", "uncertainty:number:Degree of uncertainty:optional"
       ]
     }
   }
@@ -173,16 +173,28 @@ The server accepts CLI arguments to customize which parameters are required or o
 ```
 
 **Available arguments:**
-- `--all-mandatory` - Make all parameters mandatory (maximum cognitive scaffolding)
+- `--all-required` - Make all parameters required (maximum cognitive scaffolding)
 - `--all-optional` - Make all parameters optional including prompt (minimum ceremony)
-- `--mandatory <param1,param2>` - Make specific parameters mandatory
+- `--required <param1,param2>` - Make specific parameters required
 - `--optional <param1,param2>` - Make specific parameters optional
-- `--add-param <name:type:description>` - Add custom parameters dynamically
+- `--add-param <name:type:description[:required]>` - Add custom parameters dynamically
+  - Format: `name:type:description` or `name:type:description:required|optional`
+  - Type: `string` or `number`
+  - Required field: `required` or `optional` (defaults to `optional`)
 - `--help` - Show help message
+
+**Examples:**
+```bash
+# Optional custom parameter (default)
+--add-param "focus:string:Current area of focus"
+
+# Required custom parameter
+--add-param "confidence:number:Confidence level:required"
+```
 
 **Use cases:**
 - **Quick pivots**: `--all-optional` for lightweight cognitive shifts
-- **Deep exploration**: `--all-mandatory` for comprehensive scaffolded thinking
+- **Deep exploration**: `--all-required` for comprehensive scaffolded thinking
 - **Domain-specific**: `--add-param` to extend with custom cognitive dimensions
 
 ## Parameters
@@ -233,4 +245,4 @@ MIT
 
 ---
 
-*Concept and implementation with janbam 🌱*
+*Built with janbam 🌱*

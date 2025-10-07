@@ -49,7 +49,7 @@ Test by using it! The best validation is whether calling Self actually triggers 
 1. Single call: Simple cognitive pivot
 2. Multiple consecutive calls: Multi-angle exploration (3-5 calls before action)
 3. With `--all-optional`: Lightweight quick pivots
-4. With `--all-mandatory`: Deep scaffolded exploration
+4. With `--all-required`: Deep scaffolded exploration
 5. With `--add-param`: Domain-specific cognitive dimensions
 
 ## Parameters
@@ -71,23 +71,28 @@ The server accepts command-line arguments to customize parameter requirements an
 - Custom parameters enable domain-specific cognitive dimensions
 
 **CLI Arguments:**
-- `--all-mandatory` - Require all parameters (maximum scaffolding)
+- `--all-required` - Require all parameters (maximum scaffolding)
 - `--all-optional` - Make everything optional (minimum ceremony)
-- `--mandatory prompt,temperature` - Specify which params are required
+- `--required prompt,temperature` - Specify which params are required
 - `--optional extra,depth` - Specify which params are optional
-- `--add-param "focus:string:Current area of focus"` - Add custom parameters
+- `--add-param "name:type:description[:required]"` - Add custom parameters
+  - Required field: `required` or `optional`
+  - Defaults to optional if not specified
 
 **Examples:**
 
 ```bash
 # Minimal version: only prompt required
-node dist/index.js --mandatory prompt
+node dist/index.js --required prompt
 
 # Full scaffolding: all params required
-node dist/index.js --all-mandatory
+node dist/index.js --all-required
 
-# Custom cognitive dimensions
+# Custom cognitive dimensions (optional by default)
 node dist/index.js --add-param "risk_tolerance:number:Acceptable risk level"
+
+# Required custom parameter
+node dist/index.js --add-param "focus:string:Current focus area:required"
 ```
 
 Configure in `.mcp.json` by adding arguments to the `args` array.
