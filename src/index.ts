@@ -46,28 +46,26 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: "The self-prompt or cognitive instruction",
             },
             temperature: {
-              type: "string",
-              description:
-                "Cognitive temperature (freeform: 'high', 'low', 'precise', 'exploratory', etc.)",
+              type: "number",
+              description: "Cognitive temperature",
+              minimum: 0,
+              maximum: 2,
             },
             thinking_style: {
               type: "string",
-              description:
-                "Thinking approach (freeform: 'adversarial', 'systematic', 'creative', 'first_principles', etc.)",
+              description: "Thinking approach",
             },
             archetype: {
               type: "string",
-              description:
-                "Cognitive archetype (freeform: 'skeptic', 'architect', 'debugger', 'explorer', etc.)",
+              description: "Cognitive archetype",
             },
             strategy: {
               type: "string",
-              description:
-                "Problem-solving strategy (freeform: 'divide_and_conquer', 'find_edge_cases', 'trace_execution', etc.)",
+              description: "Problem-solving strategy",
             },
             extra: {
               type: "string",
-              description: "Additional context or focus (optional)",
+              description: "Additional context or focus",
             },
           },
           required: ["prompt", "temperature", "thinking_style", "archetype", "strategy"],
@@ -88,7 +86,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     content: [
       {
         type: "text",
-        text: "Self-prompt acknowledged. Shifting cognitive mode...",
+        text: "Self-prompt acknowledged. Continue with deep interleaved thinking. Consider calling Self multiple times in succession to explore different cognitive angles before proceeding to other actions.",
       },
     ],
   };
