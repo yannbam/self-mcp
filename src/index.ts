@@ -45,14 +45,14 @@ function parseArgs(): ParamDef[] {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
 
-    if (arg === "--all-mandatory") {
-      // Make all params mandatory
+    if (arg === "--all-required") {
+      // Make all params required
       params = params.map(p => ({ ...p, required: true }));
     } else if (arg === "--all-optional") {
       // Make all params optional
       params = params.map(p => ({ ...p, required: false }));
-    } else if (arg === "--mandatory" && args[i + 1]) {
-      // Make specific params mandatory
+    } else if (arg === "--required" && args[i + 1]) {
+      // Make specific params required
       const names = args[++i].split(",").map(s => s.trim());
       params = params.map(p => names.includes(p.name) ? { ...p, required: true } : p);
     } else if (arg === "--optional" && args[i + 1]) {
@@ -68,14 +68,14 @@ function parseArgs(): ParamDef[] {
         const type = parts[1].trim();
         const requiredField = parts[parts.length - 1].trim().toLowerCase();
 
-        // Check if last field is mandatory/optional/true/false
+        // Check if last field is required/optional
         let isRequired = false;
         let description: string;
 
-        if (requiredField === "mandatory" || requiredField === "true" || requiredField === "required") {
+        if (requiredField === "required") {
           isRequired = true;
           description = parts.slice(2, -1).join(":").trim();
-        } else if (requiredField === "optional" || requiredField === "false") {
+        } else if (requiredField === "optional") {
           isRequired = false;
           description = parts.slice(2, -1).join(":").trim();
         } else {
@@ -98,23 +98,23 @@ Self-MCP Server - Metacognitive self-prompting for Claude
 Usage: node dist/index.js [options]
 
 Options:
-  --all-mandatory              Make all parameters mandatory
+  --all-required               Make all parameters required
   --all-optional               Make all parameters optional
-  --mandatory <param1,param2>  Make specific parameters mandatory
+  --required <param1,param2>   Make specific parameters required
   --optional <param1,param2>   Make specific parameters optional
   --add-param <spec>           Add custom parameter
                                Format: name:type:description[:required]
                                Type: string|number
-                               Required: mandatory|optional (default: optional)
+                               Required: required|optional (default: optional)
   --help, -h                   Show this help message
 
 Examples:
-  node dist/index.js --mandatory prompt,temperature
+  node dist/index.js --required prompt,temperature
   node dist/index.js --all-optional
   node dist/index.js --add-param "focus:string:Current area of focus"
-  node dist/index.js --add-param "confidence:number:Confidence level:mandatory"
+  node dist/index.js --add-param "confidence:number:Confidence level:required"
 
-Default: prompt is mandatory, all others optional
+Default: prompt is required, all others optional
       `);
       process.exit(0);
     }
