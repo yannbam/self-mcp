@@ -56,7 +56,7 @@ Test by using it! The best validation is whether calling Self actually triggers 
 
 **Default configuration:**
 - `prompt` (string) - Required
-- All others optional: `temperature`, `thinking_style`, `archetype`, `strategy`, `scope`, `depth`, `budget`, `extra`
+- All others optional: `temperature`, `thinking_style`, `archetype`, `strategy`, `scope`, `depth`, `extra`
 
 All string parameters are completely freeform - Claude invents appropriate values.
 
