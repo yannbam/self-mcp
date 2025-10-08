@@ -33,7 +33,6 @@ const DEFAULT_PARAMS: ParamDef[] = [
   { name: "strategy", type: "string", description: "Problem-solving strategy", required: false },
   { name: "scope", type: "string", description: "Cognitive zoom level", required: false },
   { name: "depth", type: "string", description: "Thoroughness and time investment", required: false },
-  { name: "budget", type: "string", description: "Resource and constraint awareness", required: false },
   { name: "extra", type: "string", description: "Additional context or focus", required: false },
 ];
 

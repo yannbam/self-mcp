@@ -18,7 +18,7 @@ The tool doesn't change Claude's behavior - it makes Claude's metacognition *exp
 ## How It Works
 
 The `Self` tool:
-- Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, scope, depth, budget, extra)
+- Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, scope, depth, extra)
 - Returns a simple acknowledgment message
 - Does nothing else
 
@@ -39,7 +39,6 @@ Self(
   strategy="find_edge_cases",
   scope="system_wide",
   depth="deep_dive",
-  budget="ample_tokens",
   extra="Focus on concurrency issues"
 )
 
@@ -207,7 +206,6 @@ The server accepts CLI arguments to customize which parameters are required or o
 - `strategy` - Problem-solving strategy (optional)
 - `scope` - Cognitive zoom level (optional)
 - `depth` - Thoroughness and time investment (optional)
-- `budget` - Resource and constraint awareness (optional)
 - `extra` - Additional context or focus (optional)
 
 All string parameters are **completely freeform** - Claude invents values that make sense in the moment.
