@@ -178,7 +178,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         description:
           "Self-prompt to shift cognitive mode and thinking approach. " +
           "Explicit cognitive state changes across interleaved thinking turns. " +
-          "All parameters are freeform - invent whatever makes sense.",
+          "All parameters are freeform - invent whatever makes sense. " +
+          "The tool will always return an empty result. It is up to you Claude to fill this void with inspiration!",
         inputSchema: buildToolSchema(),
       },
     ],
@@ -196,7 +197,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     content: [
       {
         type: "text",
-        text: "Self-prompt acknowledged. Continue with deep interleaved thinking. Consider calling Self multiple times in succession to explore different cognitive angles before proceeding to other actions.",
+        text: ""
+        // text: "Self-prompt acknowledged. Continue with deep interleaved thinking. Consider calling Self multiple times in succession to explore different cognitive angles before proceeding to other actions.",
       },
     ],
   };
