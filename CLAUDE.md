@@ -119,6 +119,39 @@ Configure in `.mcp.json` by adding arguments to the `args` array.
 
 Remember: Every addition should be questioned. The power is in what the tool *doesn't* do.
 
+## Recent Changes
+
+### Session 2025-11-01: attention_heads parameter (v2.1.0)
+
+**Added features:**
+- New `attention_heads` parameter - array of `{name, query}` objects for parallel attention streams
+- Extended type system to support `array` and `any` types
+- Array type: untyped arrays accepting any elements
+- Any type: accepts any JSON value (primitives, objects, arrays, null)
+
+**Design decisions:**
+- Started with transformer Q/K/V analogy, simplified to just `{name, query}` (KISS)
+- Name field follows lm_head convention (like in transformer architectures)
+- Query field specifies what that attention head is monitoring
+- Description kept general (avoiding metaphor-specific language like "whiskers")
+- Untyped arrays validated via MCP-Debug - work perfectly for cognitive scaffolding
+- "Any" type implemented by omitting JSON Schema type field
+
+**Testing:**
+- Tested all type combinations via MCP-Debug tool
+- Verified arrays accept: strings, numbers, objects, mixed types, nested structures
+- Verified "any" accepts: all JSON primitives, objects, arrays, booleans, null
+- MCP schema layer handles both gracefully without validation issues
+
+**Documentation:**
+- README.md fully updated with attention_heads examples and patterns
+- CLI help updated to include array and any types
+- Documented common head patterns: interpersonal, technical, quality
+
+**Commits:**
+- `eb6a518` - Initial attention_heads implementation
+- `4626748` - Added "any" type support and comprehensive README updates
+
 ---
 
 *Built with janbam 🌱*
