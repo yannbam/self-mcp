@@ -156,7 +156,10 @@ Remember: Every addition should be questioned. The power is in what the tool *do
 - package.json version kept at v2.1.0 (minor feature addition)
 
 **Commits:**
-- TBD - Custom tool description implementation
+- `241c630` - feat: add custom tool description CLI arguments
+
+**Pull Request:**
+- PR #5: https://github.com/yannbam/self-mcp/pull/5
 
 ### Session 2025-11-01: attention_heads parameter (v2.1.0)
 
