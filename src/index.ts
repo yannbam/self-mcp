@@ -17,10 +17,11 @@ import {
 // Parameter definition type
 interface ParamDef {
   name: string;
-  type: "string" | "number";
+  type: "string" | "number" | "array";
   description: string;
   minimum?: number;
   maximum?: number;
+  items?: any;  // JSON schema for array items
   required: boolean;
 }
 
@@ -34,6 +35,20 @@ const DEFAULT_PARAMS: ParamDef[] = [
   { name: "scope", type: "string", description: "Cognitive zoom level", required: false },
   { name: "depth", type: "string", description: "Thoroughness and time investment", required: false },
   { name: "extra", type: "string", description: "Additional context or focus", required: false },
+  {
+    name: "attention_heads",
+    type: "array",
+    description: "Parallel attention streams for simultaneously attending to multiple aspects. Each head focuses on a specific concern or dimension. Example: [{ name: 'empathy_head', query: 'signs of frustration or confusion' }, { name: 'truth_head', query: 'false assumptions needing correction' }]",
+    items: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "Name of this attention head (e.g., empathy_head, safety_head, truth_head)" },
+        query: { type: "string", description: "What this head is attending to" }
+      },
+      required: ["name", "query"]
+    },
+    required: false
+  },
 ];
 
 // Parse CLI arguments
@@ -85,7 +100,7 @@ function parseArgs(): ParamDef[] {
 
         params.push({
           name,
-          type: (type === "number" ? "number" : "string") as "string" | "number",
+          type: (type === "number" ? "number" : type === "array" ? "array" : "string") as "string" | "number" | "array",
           description,
           required: isRequired,
         });
@@ -103,7 +118,7 @@ Options:
   --optional <param1,param2>   Make specific parameters optional
   --add-param <spec>           Add custom parameter
                                Format: name:type:description[:required]
-                               Type: string|number
+                               Type: string|number|array
                                Required: required|optional (default: optional)
   --help, -h                   Show this help message
 
@@ -128,7 +143,7 @@ const paramDefs = parseArgs();
 const server = new Server(
   {
     name: "self-mcp",
-    version: "0.1.0",
+    version: "2.1.0",
   },
   {
     capabilities: {
@@ -153,6 +168,9 @@ function buildToolSchema() {
     }
     if (param.type === "number" && param.maximum !== undefined) {
       propDef.maximum = param.maximum;
+    }
+    if (param.type === "array" && param.items !== undefined) {
+      propDef.items = param.items;
     }
 
     properties[param.name] = propDef;
