@@ -1,12 +1,5 @@
 # Changelog
 
-All notable changes to Self-MCP will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-
 ## [2.1.0] - 2025-11-01
 
 ### Added
@@ -69,18 +62,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLAUDE.md developer guide
 - .mcp.json configuration example
 
----
-
-## Version History Notes
-
-### The v0.1.0 → v2.0.0 Jump
-
-The unusual version jump from v0.1.0 (beta) to v2.0.0 was intentional and reflects a profound insight: **returning an empty tool result was an 80/20 pivot** that fundamentally changed how the tool integrates into Claude's cognitive flow.
-
-What seemed like a simple implementation detail (empty vs. message) turned out to be a major architectural decision about **where the metacognition happens** - not in the tool's response, but in Claude's reaction to calling the tool.
-
-This warranted a major version bump to signal the philosophical shift, even though the technical change was minimal.
-
----
-
-*Built with janbam 🌱*
