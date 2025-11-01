@@ -159,7 +159,7 @@ Remember: Every addition should be questioned. The power is in what the tool *do
 - `241c630` - feat: add custom tool description CLI arguments
 
 **Pull Request:**
-- PR #5: https://github.com/yannbam/self-mcp/pull/5
+- PR #6 (feature/custom-tool-description → dev): https://github.com/yannbam/self-mcp/pull/6
 
 ### Session 2025-11-01: attention_heads parameter (v2.1.0)
 
