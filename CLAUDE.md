@@ -166,7 +166,9 @@ Remember: Every addition should be questioned. The power is in what the tool *do
 
 **Outcome**: Created PR_REVIEW_FINDINGS.md with self-contained fix guide for next session (3-4 hours estimated)
 
-**Next steps**: Implement CLI parsing fixes, update documentation, then merge to main
+**Additional fix identified**: Tool description needs update to encourage multiple consecutive Self calls (the magic pattern lost when acknowledgment message was removed). Added to PR_REVIEW_FINDINGS.md.
+
+**Next steps**: Implement CLI parsing fixes, update documentation (including tool description), then merge to main
 
 ---
 
