@@ -17,7 +17,7 @@ import {
 // Parameter definition type
 interface ParamDef {
   name: string;
-  type: "string" | "number" | "array";
+  type: "string" | "number" | "array" | "any";
   description: string;
   minimum?: number;
   maximum?: number;
@@ -100,7 +100,7 @@ function parseArgs(): ParamDef[] {
 
         params.push({
           name,
-          type: (type === "number" ? "number" : type === "array" ? "array" : "string") as "string" | "number" | "array",
+          type: (type === "number" ? "number" : type === "array" ? "array" : type === "any" ? "any" : "string") as "string" | "number" | "array" | "any",
           description,
           required: isRequired,
         });
@@ -118,7 +118,7 @@ Options:
   --optional <param1,param2>   Make specific parameters optional
   --add-param <spec>           Add custom parameter
                                Format: name:type:description[:required]
-                               Type: string|number|array
+                               Type: string|number|array|any
                                Required: required|optional (default: optional)
   --help, -h                   Show this help message
 
@@ -159,9 +159,13 @@ function buildToolSchema() {
 
   for (const param of paramDefs) {
     const propDef: any = {
-      type: param.type,
       description: param.description,
     };
+
+    // For "any" type, omit the type field to accept any JSON value
+    if (param.type !== "any") {
+      propDef.type = param.type;
+    }
 
     if (param.type === "number" && param.minimum !== undefined) {
       propDef.minimum = param.minimum;

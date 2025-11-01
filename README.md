@@ -18,7 +18,7 @@ The tool doesn't change Claude's behavior - it makes Claude's metacognition *exp
 ## How It Works
 
 The `Self` tool:
-- Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, scope, depth, extra)
+- Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, scope, depth, extra, attention_heads)
 - Returns a simple acknowledgment message
 - Does nothing else
 
@@ -26,11 +26,12 @@ But the act of *calling* the tool creates:
 1. **Explicit cognitive state changes** visible in the transcript
 2. **Natural breakpoints** in thinking/tool-call flow
 3. **Metacognitive scaffolding** through the tool interface itself
+4. **Parallel attention streams** for simultaneously monitoring multiple dimensions
 
 ## Example Usage
 
-```python
-# Claude can self-prompt mid-session:
+```
+# Basic cognitive shift:
 Self(
   prompt="Re-examine from first principles",
   temperature=1.5,
@@ -42,8 +43,18 @@ Self(
   extra="Focus on concurrency issues"
 )
 
-# Tool returns: "Self-prompt acknowledged. Shifting cognitive mode..."
-# Claude naturally continues thinking in that mode
+# With parallel attention streams:
+Self(
+  prompt="Review this code for production readiness",
+  attention_heads=[
+    {"name": "security_head", "query": "authentication vulnerabilities"},
+    {"name": "performance_head", "query": "bottlenecks and optimization opportunities"},
+    {"name": "maintainability_head", "query": "code clarity and future extensibility"}
+  ]
+)
+
+# Tool returns empty acknowledgment
+# Claude naturally continues thinking in that mode with those attention streams active
 ```
 
 All parameters are **completely freeform** (except temperature which is numeric 0-2) - Claude invents whatever cognitive parameters make sense in the moment.
@@ -178,7 +189,9 @@ The server accepts CLI arguments to customize which parameters are required or o
 - `--optional <param1,param2>` - Make specific parameters optional
 - `--add-param <name:type:description[:required]>` - Add custom parameters dynamically
   - Format: `name:type:description` or `name:type:description:required|optional`
-  - Type: `string` or `number`
+  - Type: `string`, `number`, `array`, or `any`
+    - `array` - Untyped array accepting any elements
+    - `any` - Accepts any JSON value (primitives, arrays, objects, null)
   - Required field: `required` or `optional` (defaults to `optional`)
 - `--help` - Show help message
 
@@ -189,6 +202,12 @@ The server accepts CLI arguments to customize which parameters are required or o
 
 # Required custom parameter
 --add-param "confidence:number:Confidence level:required"
+
+# Flexible array parameter
+--add-param "perspectives:array:List of viewpoints to consider:optional"
+
+# Wildcard parameter accepting any JSON value
+--add-param "context:any:Arbitrary context data:optional"
 ```
 
 **Use cases:**
@@ -207,8 +226,34 @@ The server accepts CLI arguments to customize which parameters are required or o
 - `scope` - Cognitive zoom level (optional)
 - `depth` - Thoroughness and time investment (optional)
 - `extra` - Additional context or focus (optional)
+- `attention_heads` - Parallel attention streams, array of `{name, query}` objects (optional)
+  - Each head focuses on a specific concern or dimension
+  - Example: `[{"name": "empathy_head", "query": "signs of user frustration"}]`
 
 All string parameters are **completely freeform** - Claude invents values that make sense in the moment.
+
+### Attention Heads
+
+The `attention_heads` parameter enables parallel awareness streams - multiple concerns monitored simultaneously:
+
+```
+attention_heads=[
+  {"name": "truth_head", "query": "false assumptions needing correction"},
+  {"name": "safety_head", "query": "potential risks or ethical concerns"},
+  {"name": "clarity_head", "query": "points of confusion or ambiguity"}
+]
+```
+
+Each head has:
+- `name` - Identifier for this attention stream (e.g., `empathy_head`, `security_head`)
+- `query` - What this head is attending to or watching for
+
+Common head types that emerge naturally:
+- **Interpersonal**: `empathy_head`, `safety_head`, `resonance_head`
+- **Technical**: `security_head`, `performance_head`, `correctness_head`
+- **Quality**: `clarity_head`, `truth_head`, `completeness_head`
+
+The structure is intentionally flexible - invent whatever attention streams make sense for your context.
 
 ## Philosophy
 
@@ -226,9 +271,11 @@ The tool does nothing, but calling it does everything:
 
 - **Research & Analysis**: Multiple Self calls from different angles before synthesis
 - **Debugging**: Explicit cognitive mode switches when stuck
-- **Code Review**: Structured perspective-taking (adversarial, user-focused, security-minded)
+- **Code Review**: Structured perspective-taking with attention_heads monitoring security, performance, maintainability
 - **Writing**: Audience awareness and tone calibration
 - **Complex Problem-Solving**: Systematic exploration of solution space
+- **User Interaction**: Parallel attention streams for empathy, truth-checking, and safety monitoring
+- **Multi-concern Tasks**: Use attention_heads to maintain simultaneous awareness of competing priorities
 
 ## Contributing
 
