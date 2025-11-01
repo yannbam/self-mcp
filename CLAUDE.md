@@ -170,6 +170,34 @@ Remember: Every addition should be questioned. The power is in what the tool *do
 
 **Next steps**: Implement CLI parsing fixes, update documentation (including tool description), then merge to main
 
+### Session 2025-11-01: CLI Validation Fixes Implementation
+
+**Implemented all fixes** from PR_REVIEW_FINDINGS.md systematically across 5 phases:
+
+**Phase 1 & 2: Critical fixes and improvements** (src/index.ts parseArgs function):
+- Fixed colon-splitting bug in --add-param (descriptions with colons/URLs now work correctly)
+- Added type validation with case-insensitive normalization (invalid types error clearly)
+- Added malformed --add-param validation (< 3 parts errors with helpful message)
+- Added --required/--optional parameter name validation (typos error with list of valid params)
+- Added unknown CLI argument detection (flag typos error suggesting --help)
+- Added empty name/description validation
+- Added duplicate parameter name detection
+
+**Phase 3: Documentation updates**:
+- Updated tool description to encourage multiple consecutive Self calls (critical for users discovering the deep interleaved thinking pattern)
+- Fixed README.md inconsistency (now correctly states "empty response" not "acknowledgment message")
+- Added explanatory comments for intentionally empty tool response (documents minimalist philosophy)
+- Updated CLAUDE.md line count to ~295 lines (grew from 239 due to validation code)
+
+**Phase 4: Manual testing**:
+- Built project successfully
+- Verified all 5 fix categories with edge case testing
+- All tests passed with clear, helpful error messages
+
+**Verification complete**: All critical issues resolved. Code now has comprehensive CLI validation with user-friendly error messages. Ready for merge to main.
+
+**Commit**: `eafac71` - fix: add comprehensive CLI argument validation and error handling
+
 ---
 
 *Built with janbam 🌱*
