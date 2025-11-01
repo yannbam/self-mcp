@@ -19,7 +19,7 @@ The tool doesn't change Claude's behavior - it makes Claude's metacognition *exp
 
 The `Self` tool:
 - Takes cognitive parameters as input (prompt, temperature, thinking_style, archetype, strategy, scope, depth, extra, attention_heads)
-- Returns a simple acknowledgment message
+- Returns an empty response (no text content)
 - Does nothing else
 
 But the act of *calling* the tool creates:
@@ -53,7 +53,7 @@ Self(
   ]
 )
 
-# Tool returns empty acknowledgment
+# Tool returns empty response
 # Claude naturally continues thinking in that mode with those attention streams active
 ```
 

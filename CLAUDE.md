@@ -107,7 +107,7 @@ Configure in `.mcp.json` by adding arguments to the `args` array.
 - Tool handler simply acknowledges - all cognitive work happens in Claude's response
 
 **Key files:**
-- `src/index.ts` - Complete server implementation (~190 lines)
+- `src/index.ts` - Complete server implementation (~295 lines)
 - `package.json` - Dependencies and metadata
 - `README.md` - Public documentation
 - `CLAUDE.md` - Developer documentation (this file)

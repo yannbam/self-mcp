@@ -68,43 +68,91 @@ function parseArgs(): ParamDef[] {
     } else if (arg === "--required" && args[i + 1]) {
       // Make specific params required
       const names = args[++i].split(",").map(s => s.trim());
+      const existingNames = params.map(p => p.name);
+      const invalidNames = names.filter(n => !existingNames.includes(n));
+
+      if (invalidNames.length > 0) {
+        console.error(`ERROR: Unknown parameter names in --required: ${invalidNames.join(", ")}`);
+        console.error(`Available parameters: ${existingNames.join(", ")}`);
+        process.exit(1);
+      }
+
       params = params.map(p => names.includes(p.name) ? { ...p, required: true } : p);
     } else if (arg === "--optional" && args[i + 1]) {
       // Make specific params optional
       const names = args[++i].split(",").map(s => s.trim());
+      const existingNames = params.map(p => p.name);
+      const invalidNames = names.filter(n => !existingNames.includes(n));
+
+      if (invalidNames.length > 0) {
+        console.error(`ERROR: Unknown parameter names in --optional: ${invalidNames.join(", ")}`);
+        console.error(`Available parameters: ${existingNames.join(", ")}`);
+        process.exit(1);
+      }
+
       params = params.map(p => names.includes(p.name) ? { ...p, required: false } : p);
     } else if (arg === "--add-param" && args[i + 1]) {
       // Add custom parameter: name:type:description[:required]
       const spec = args[++i];
       const parts = spec.split(":");
-      if (parts.length >= 3) {
-        const name = parts[0].trim();
-        const type = parts[1].trim();
-        const requiredField = parts[parts.length - 1].trim().toLowerCase();
 
-        // Check if last field is required/optional
-        let isRequired = false;
-        let description: string;
-
-        if (requiredField === "required") {
-          isRequired = true;
-          description = parts.slice(2, -1).join(":").trim();
-        } else if (requiredField === "optional") {
-          isRequired = false;
-          description = parts.slice(2, -1).join(":").trim();
-        } else {
-          // No required field specified, default to optional
-          isRequired = false;
-          description = parts.slice(2).join(":").trim();
-        }
-
-        params.push({
-          name,
-          type: (type === "number" ? "number" : type === "array" ? "array" : type === "any" ? "any" : "string") as "string" | "number" | "array" | "any",
-          description,
-          required: isRequired,
-        });
+      // Validate minimum format: name:type:description
+      if (parts.length < 3) {
+        console.error(`ERROR: Invalid --add-param format: '${spec}'`);
+        console.error(`Expected format: name:type:description[:required]`);
+        console.error(`Example: --add-param "focus:string:Current focus area:optional"`);
+        process.exit(1);
       }
+
+      const name = parts[0].trim();
+      const type = parts[1].trim();
+
+      // Validate name is not empty
+      if (name.length === 0) {
+        console.error(`ERROR: Parameter name cannot be empty in --add-param '${spec}'`);
+        process.exit(1);
+      }
+
+      // Validate type is valid
+      const validTypes = ["string", "number", "array", "any"];
+      const normalizedType = type.toLowerCase();
+
+      if (!validTypes.includes(normalizedType)) {
+        console.error(`ERROR: Invalid type '${type}' in --add-param '${spec}'`);
+        console.error(`Valid types: string, number, array, any`);
+        process.exit(1);
+      }
+
+      // Check for duplicate parameter name
+      const existingNames = params.map(p => p.name);
+      if (existingNames.includes(name)) {
+        console.error(`ERROR: Parameter '${name}' already exists`);
+        console.error(`Choose a different name or use --required/--optional to modify it`);
+        process.exit(1);
+      }
+
+      // Handle optional :required/:optional suffix
+      const lastPart = parts[parts.length - 1].trim().toLowerCase();
+      const hasRequiredSuffix = lastPart === "required" || lastPart === "optional";
+
+      // Reconstruct description by joining middle parts (handles colons in description)
+      const descriptionParts = hasRequiredSuffix ? parts.slice(2, -1) : parts.slice(2);
+      const description = descriptionParts.join(":").trim();
+
+      // Validate description is not empty
+      if (description.length === 0) {
+        console.error(`ERROR: Parameter description cannot be empty in --add-param '${spec}'`);
+        process.exit(1);
+      }
+
+      const isRequired = hasRequiredSuffix ? lastPart === "required" : false;
+
+      params.push({
+        name,
+        type: normalizedType as "string" | "number" | "array" | "any",
+        description,
+        required: isRequired,
+      });
     } else if (arg === "--help" || arg === "-h") {
       console.log(`
 Self-MCP Server - Metacognitive self-prompting for Claude
@@ -131,6 +179,11 @@ Examples:
 Default: prompt is required, all others optional
       `);
       process.exit(0);
+    } else if (arg.startsWith("--") || arg.startsWith("-")) {
+      // Unknown flag
+      console.error(`ERROR: Unknown argument: ${arg}`);
+      console.error(`Run with --help to see available options`);
+      process.exit(1);
     }
   }
 
@@ -201,7 +254,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           "Self-prompt to shift cognitive mode and thinking approach. " +
           "Explicit cognitive state changes across interleaved thinking turns. " +
           "All parameters are freeform - invent whatever makes sense. " +
-          "The tool will always return an empty result. It is up to you Claude to fill this void with inspiration!",
+          "The tool will always return an empty result. It is up to you Claude to fill this void with inspiration! " +
+          "For deep exploration: use multiple consecutive Self tool calls interleaved with thinking for multi-dimensional perspectives.",
         inputSchema: buildToolSchema(),
       },
     ],
@@ -219,8 +273,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     content: [
       {
         type: "text",
+        // Intentionally empty - the cognitive shift happens through the tool call itself,
+        // not through the response content. This preserves the minimalist philosophy.
+        // Guidance about multiple calls is now in the tool description instead.
         text: ""
-        // text: "Self-prompt acknowledged. Continue with deep interleaved thinking. Consider calling Self multiple times in succession to explore different cognitive angles before proceeding to other actions.",
       },
     ],
   };

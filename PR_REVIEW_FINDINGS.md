@@ -397,7 +397,7 @@ description:
   "Explicit cognitive state changes across interleaved thinking turns. " +
   "All parameters are freeform - invent whatever makes sense. " +
   "The tool will always return an empty result. It is up to you Claude to fill this void with inspiration! " +
-  "For deep exploration: use multiple consecutive Self tool calls interleaved with thinking for a multi-dimensional perspective.",
+  "For deep exploration: use multiple consecutive Self tool calls interleaved with thinking for multi-dimensional perspectives.",
 ```
 
 **Why this matters**: The magic of the Self tool isn't in a single call, but in 3-5+ consecutive calls exploring different cognitive angles before acting. Without this guidance in the tool description, Claude might not discover this powerful pattern.
