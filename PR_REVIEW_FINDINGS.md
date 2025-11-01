@@ -375,6 +375,35 @@ Actual: 239 lines
 
 ---
 
+### Update Tool Description to Encourage Multiple Calls
+
+**Location**: `src/index.ts:200-204`
+
+**Context**: With the removal of the acknowledgment message, we lost the encouragement to use multiple consecutive Self calls. That's where the deep interleaved thinking magic happens!
+
+**Current**:
+```typescript
+description:
+  "Self-prompt to shift cognitive mode and thinking approach. " +
+  "Explicit cognitive state changes across interleaved thinking turns. " +
+  "All parameters are freeform - invent whatever makes sense. " +
+  "The tool will always return an empty result. It is up to you Claude to fill this void with inspiration!",
+```
+
+**Fix**: Add guidance about multiple consecutive calls:
+```typescript
+description:
+  "Self-prompt to shift cognitive mode and thinking approach. " +
+  "Explicit cognitive state changes across interleaved thinking turns. " +
+  "All parameters are freeform - invent whatever makes sense. " +
+  "The tool will always return an empty result. It is up to you Claude to fill this void with inspiration! " +
+  "For deep exploration: use multiple consecutive Self tool calls interleaved with thinking for a multi-dimensional perspective.",
+```
+
+**Why this matters**: The magic of the Self tool isn't in a single call, but in 3-5+ consecutive calls exploring different cognitive angles before acting. Without this guidance in the tool description, Claude might not discover this powerful pattern.
+
+---
+
 ## Implementation Priority
 
 ### Phase 1: Critical Fixes (Must do before merge)
@@ -396,13 +425,14 @@ Actual: 239 lines
 8. Fix README.md inconsistency - 5 min
 9. Remove/document commented code - 5 min
 10. Update line count - 2 min
+11. Update tool description to encourage multiple calls - 2 min
 
-**Phase 3 Total**: ~12 min
+**Phase 3 Total**: ~14 min
 
 ### Phase 4: Testing (Optional but recommended)
-11. Add vitest framework - 30 min
-12. Write CLI parsing tests - 1 hour
-13. Write schema generation tests - 30 min
+12. Add vitest framework - 30 min
+13. Write CLI parsing tests - 1 hour
+14. Write schema generation tests - 30 min
 
 **Phase 4 Total**: ~2 hours
 
