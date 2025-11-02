@@ -13,6 +13,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import * as fs from "fs";
 
 // Parameter definition type
 interface ParamDef {
@@ -153,6 +154,53 @@ function parseArgs(): ParamDef[] {
         description,
         required: isRequired,
       });
+    } else if (arg === "--tool-description" && args[i + 1]) {
+      // Set custom tool description from command line
+      if (toolDescriptionSource !== null) {
+        if (toolDescriptionSource === "--tool-description") {
+          console.error(`ERROR: --tool-description can only be used once`);
+        } else {
+          console.error(`ERROR: Cannot use both --tool-description and --tool-description-file`);
+        }
+        process.exit(1);
+      }
+
+      const description = args[++i].trim();
+
+      if (description.length === 0) {
+        console.error(`ERROR: Tool description cannot be empty`);
+        process.exit(1);
+      }
+
+      customToolDescription = description;
+      toolDescriptionSource = "--tool-description";
+    } else if (arg === "--tool-description-file" && args[i + 1]) {
+      // Set custom tool description from file
+      if (toolDescriptionSource !== null) {
+        if (toolDescriptionSource === "--tool-description-file") {
+          console.error(`ERROR: --tool-description-file can only be used once`);
+        } else {
+          console.error(`ERROR: Cannot use both --tool-description and --tool-description-file`);
+        }
+        process.exit(1);
+      }
+
+      const filepath = args[++i];
+
+      try {
+        const description = fs.readFileSync(filepath, "utf-8").trim();
+
+        if (description.length === 0) {
+          console.error(`ERROR: Tool description file '${filepath}' is empty`);
+          process.exit(1);
+        }
+
+        customToolDescription = description;
+        toolDescriptionSource = "--tool-description-file";
+      } catch (error: any) {
+        console.error(`ERROR: Failed to read tool description file '${filepath}': ${error.message}`);
+        process.exit(1);
+      }
     } else if (arg === "--help" || arg === "-h") {
       console.log(`
 Self-MCP Server - Metacognitive self-prompting for Claude
@@ -168,6 +216,8 @@ Options:
                                Format: name:type:description[:required]
                                Type: string|number|array|any
                                Required: required|optional (default: optional)
+  --tool-description <text>    Custom tool description text
+  --tool-description-file <path>  Read tool description from file
   --help, -h                   Show this help message
 
 Examples:
@@ -190,6 +240,8 @@ Default: prompt is required, all others optional
   return params;
 }
 
+let customToolDescription: string | null = null;
+let toolDescriptionSource: "--tool-description" | "--tool-description-file" | null = null;
 const paramDefs = parseArgs();
 
 // Create server instance
@@ -250,7 +302,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "Self",
-        description:
+        description: customToolDescription ||
           "Self-prompt to shift cognitive mode and thinking approach. " +
           "Explicit cognitive state changes across interleaved thinking turns. " +
           "All parameters are freeform - invent whatever makes sense. " +

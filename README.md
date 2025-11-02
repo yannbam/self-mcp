@@ -193,6 +193,8 @@ The server accepts CLI arguments to customize which parameters are required or o
     - `array` - Untyped array accepting any elements
     - `any` - Accepts any JSON value (primitives, arrays, objects, null)
   - Required field: `required` or `optional` (defaults to `optional`)
+- `--tool-description <text>` - Custom tool description text (inline)
+- `--tool-description-file <path>` - Read tool description from file (mutually exclusive with --tool-description)
 - `--help` - Show help message
 
 **Examples:**
@@ -208,6 +210,12 @@ The server accepts CLI arguments to customize which parameters are required or o
 
 # Wildcard parameter accepting any JSON value
 --add-param "context:any:Arbitrary context data:optional"
+
+# Custom tool description (inline)
+--tool-description "A reasoning tool for deep thinking and metacognition"
+
+# Custom tool description from file
+--tool-description-file "./custom-descriptions/self-tool.txt"
 ```
 
 **Use cases:**

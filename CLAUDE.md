@@ -121,6 +121,46 @@ Remember: Every addition should be questioned. The power is in what the tool *do
 
 ## Recent Changes
 
+### Session 2025-11-01: Custom Tool Description (v2.1.0)
+
+**Added features:**
+- New `--tool-description <text>` CLI argument for inline custom tool descriptions
+- New `--tool-description-file <path>` CLI argument for file-based tool descriptions
+- Mutually exclusive validation between both arguments
+- Duplicate usage detection with specific error messages
+
+**Implementation:**
+- Module-level variable `customToolDescription` stores custom description
+- Module-level variable `toolDescriptionSource` tracks which flag was used
+- Synchronous file reading with fs.readFileSync (fail-fast at startup)
+- Empty description validation (after trim) for both inline and file-based
+- Clear error messages distinguish between duplicate usage vs mutual exclusivity
+
+**Design decisions:**
+- Simple KISS implementation (~50 lines added total)
+- Follows existing parseArgs validation patterns exactly
+- Fail-fast philosophy: invalid configs prevent server startup
+- File reading is synchronous to maintain simple startup flow
+- Uses `||` operator for fallback to default description
+
+**Testing:**
+- Verified mutual exclusivity error handling
+- Verified duplicate flag usage error messages
+- Verified empty description validation
+- Verified file reading with valid, missing, and empty files
+- Verified custom descriptions appear correctly in MCP tool definition via MCP-Debug
+
+**Documentation:**
+- README.md updated with new CLI arguments and examples
+- CLI help text updated
+- package.json version kept at v2.1.0 (minor feature addition)
+
+**Commits:**
+- `241c630` - feat: add custom tool description CLI arguments
+
+**Pull Request:**
+- PR #6 (feature/custom-tool-description → dev): https://github.com/yannbam/self-mcp/pull/6
+
 ### Session 2025-11-01: attention_heads parameter (v2.1.0)
 
 **Added features:**
